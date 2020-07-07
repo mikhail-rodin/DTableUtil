@@ -1,0 +1,48 @@
+digraph G {
+    splines="FALSE";
+    graph [
+        rankdir="LR"
+    ]
+    book [label=" -- book_t -- |<f0>float*** start
+        |<f1>size_t* sheet_count
+        |<f2>size_t* column_count[i+1]
+        |<f3>size_t* row_count[i+1]",
+        shape="record"
+    ];
+    tables [label="- book = i+1 sheets -
+    |<f1>float** start*|<f2> (start+1)* | <f3> ... | <f4> (start+i)*",
+        shape = "record"
+    ];
+    rows [label="-sheet = j+1 columns --
+    |<f1>float* start**|<f2> (start*+1)* | <f3> ... | <f4> (start*+j)*",
+        shape = "record"
+    ];
+    columns [label="- column = k+1 rows -
+    |<f1>float start***|<f2> (start**+1)* | <f3> ... | <f4> (start**+k)*",
+        shape = "record"
+    ];
+    colcount [
+        label="<f0> column_count* = j+1
+        |(column_count+1)*
+        |...|(column_count+i)*",
+        shape="record"
+    ];
+    sheetcount[
+        label="sheet_count* = i+1",
+        shape="record"
+    ]
+    rowcount[
+        label="<f0> row_count* = k+1 
+        |(row_count+1)*
+        |...
+        |(row_count+i)*",
+        shape="record"
+    ]
+    book:f0->tables:f1;
+    tables:f1->rows:f1;
+    rows:f1->columns:f1;
+
+    book:f1->sheetcount
+    book:f2->colcount:f0;
+    book:f3->rowcount:f0;
+}
